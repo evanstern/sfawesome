@@ -5,6 +5,11 @@ Overview of Features
 
 SF awesome is a command-line interface to sales force.
 
+There is a secondary component to sfawesome which supports a kind of
+'git commit' integration with salesforce.  When enabled, a commit
+message starting with 'SF:XXXXXXXX' -- where XXXXXXXX is a salesforce
+case -- will be added as a case comment in salesforce for that case.
+
 Run the install.bash script to install it.
 
 Commands
