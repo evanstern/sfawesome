@@ -1,0 +1,11 @@
+# RENAME TO ${HOME}/.git-sf
+
+[salesforce]
+username=interns@staffknex.com
+password=staffknex1
+token=q3WnbEChOg38Y7Fa7txXyvaJR
+owners=['Evan','Matt','Tim']
+releases=['nosehair','mollusk']
+statuses=['New','Working','Testing','On Hold','Needs Discussion','Closed']
+priorities=['Emergency','High','Medium','Low']
+types=['Bug','Release','Feature','Customer Request','Customer Support','Documentation']

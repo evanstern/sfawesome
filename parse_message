@@ -1,0 +1,108 @@
+#!/usr/bin/perl -w
+#============================================================================
+#
+#   This script is called by the commit-msg git-hook.  It will be run after a
+#   'git commit' command is executed.
+#
+#   This script takes a commit message file and reads it in, does some
+#   processing to pull out any embedded salesforce commands and then tries to
+#   update salesforce accordingly.
+#
+#   INPUT: fully qualified name of the file containing the commit message
+#
+#   VALID EMBEDDED SALESFORCE COMMANDS:
+#
+#       SF:<8 digit number>             -   Specifies the case number
+#       STATUS:<any number of chars>    -   Specifies a status update
+#       PRIORITY:<any number of chars>  -   Specifies a priority update
+#
+#============================================================================
+
+my($exit_status) = 0;
+my($comment_file) = $ARGV[0];
+
+# Open the file for reading
+open FILE, "<$comment_file" or die $!;
+
+# Read in the lines of the file
+my(@lines) = <FILE>;
+
+# Split the first line by words
+my(@split_comment) = split(" ",$lines[0]);
+
+my($case_number) = "";
+my($status) = "";
+my($priority) = "";
+
+# Loop through each word in the first line of the comment file and process it
+# by doing a regex search for embedded salesforce commands in the git commit
+# message.
+foreach (@split_comment)
+{
+    # Grab the case number
+    if ( $case_number eq "" and $_ =~ m/SF:\d+/ )
+    {
+        $case_number = $_;
+        $case_number =~ s/^SF://;
+    }
+    elsif ( $case_number eq "" and $_ =~ m/sf:\d+/ )
+    {
+        $case_number = $_;
+        $case_number =~ s/^sf://;
+    }
+    # Grab the status update command
+    elsif ( $status eq "" and $_ =~ m/STATUS:\S+/ )
+    {
+        $status = $_;
+        $status =~ s/^STATUS://;
+    }
+    elsif ( $status eq "" and $_ =~ m/status:\S+/ )
+    {
+        $status = $_;
+        $status =~ s/^status://;
+    }
+    # Grab the priority update command
+    elsif ( $priority eq "" and $_ =~ m/PRIORITY:\S+/ )
+    {
+        $priority = $_;
+        $priority =~ s/^PRIORITY://;
+    }
+}
+
+# If there was a case number given in the first line of the commit message,
+# then link this commit message to a new case comment in salesforce.
+if ( $case_number ne '' )
+{
+    # Strip out all the embedded commands from the message as well as all the
+    # leading and trailing whitespace.
+    my($comment) = join("",@lines);
+    $comment =~ s/SF:$case_number//;
+    $comment =~ s/sf:$case_number//;
+    $comment =~ s/STATUS:$status//;
+    $comment =~ s/status:$status//;
+    $comment =~ s/PRIORITY:$priority//;
+    $comment =~ s/^\s+//;
+    $comment =~ s/\s+$//;
+
+    # Create a new case comment whose message body is this git commit's commit
+    # message.
+    $exit_status = system("git-sf --add-note=\"$comment\" $case_number");
+
+    # If a status was given, run an update to this case's status
+    if ( $exit_status == 0 and $status ne "" )
+    {
+        $exit_status = system("git-sf --update-status=\"$status\" $case_number");
+    }
+
+    # If a priority was given, run an update to this case's priority
+    if ( $exit_status == 0 and $priority ne "" )
+    {
+        # TODO
+    }
+}
+
+# Exit with the appropriate exit status.  If this exits with a non-zero status,
+# the commit-msg git-hook will fail and nothing will actually be committed.
+exit($exit_status);
+
+
