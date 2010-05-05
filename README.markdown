@@ -1,7 +1,7 @@
 .. vim: filetype=rst :
 
-Overview of Features
-====================
+sfawesome
+=========
 
 SF awesome is a command-line interface to sales force.
 
@@ -10,10 +10,17 @@ There is a secondary component to sfawesome which supports a kind of
 message starting with 'SF:XXXXXXXX' -- where XXXXXXXX is a salesforce
 case -- will be added as a case comment in salesforce for that case.
 
-Run the install.bash script to install it.
+Installation
+------------
 
-Commands
---------
+Run the install.bash script to install it::
+
+    $ cd sfawesome
+
+    $ ./install.bash <path-to-git-hooks-dir>
+
+Basic Commands
+--------------
 
 These are the main command flags you can pass to the application:
 
@@ -37,19 +44,14 @@ These are the main command flags you can pass to the application:
         be ordered by field and the results can be narrowed down via
         optional command line arguments.
 
-Sub Commands
-------------
-
 Each of the main commands has a set of optional flags/options/sub
 commands associated with it that can alter the way the main command
 functions.  See below.
 
-
-Overview of Commands
-====================
-
---update-case <Case Number>
+Update Case
 ---------------------------
+--update-case <Case Number>
+
 optional flags/options::
 
     --status=<Status>
@@ -68,9 +70,10 @@ examples::
 
     $ git-sf --update-case --type=Feature --release=Ogre 00001185
 
-
---add-note <Case Number>
+Add Note
 ------------------------
+--add-note <Case Number>
+
 optional flags/options::
 
     None
@@ -80,8 +83,10 @@ examples::
     $ git-sf --add-note="This is a note" 00001185
 
 
+Get Ids (List Cases)
+--------------------
 --get-ids=<Release>
--------------------
+
 optional flags/options::
 
     --order=<Field To Order On>
@@ -99,8 +104,10 @@ examples::
     $ git-sf --get-ids --order=Developer --grep="overtime"
 
 
---get-comments <Case Number>
+Get Case Comments
 ----------------------------
+--get-comments <Case Number>
+
 optional flags/options::
 
     --order=<Field To Order On>
@@ -116,8 +123,10 @@ examples::
     $ git-sf --get-comments --order=Status --reverse 00001185
 
 
+Create A Case
+-------------
 --create=<Subject>
-------------------
+
 optional flags/options::
 
     --owner=<Owner>
@@ -143,7 +152,7 @@ examples::
 
 
 Configuration File Options
-==========================
+--------------------------
 username::
     The username for salesforce
 
@@ -168,8 +177,9 @@ priorities::
 types::
     A python list of valid types of cases
 
-command line examples
-=====================
+
+Examples
+--------
 
 Show all cases in the nosehair release::
 
