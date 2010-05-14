@@ -21,7 +21,7 @@ echo "Copying commit-msg to $1..."
 echo "Copying parse_message to $VIRTUAL_ENV/bin/..."
 /bin/cp -f parse_message $VIRTUAL_ENV/bin/
 
-echo "Copying git-sf.py to $VIRTUAL_ENV/bin/..."
-/bin/cp -f git-sf.py $VIRTUAL_ENV/bin/git-sf
+echo "Copying sfawesome.py to $VIRTUAL_ENV/bin/..."
+/bin/cp -f sfawesome.py $VIRTUAL_ENV/bin/sfawesome
 
 echo "All done!"

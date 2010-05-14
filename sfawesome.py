@@ -391,7 +391,7 @@ def print_usage(message=None):
 def parse_config():
 
     config = ConfigParser.RawConfigParser()
-    config.read(os.environ.get('HOME') + '/.git-sf')
+    config.read(os.environ.get('HOME') + '/.sfawesome')
 
     UNAME = config.get('salesforce','username')
     PWORD = config.get('salesforce','password') + config.get('salesforce','token')
