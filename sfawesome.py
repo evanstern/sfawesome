@@ -126,6 +126,10 @@ def cases_like(sfdc, search_string):
 
 def create_case(sfdc, case_dict):
 
+    """
+    Create a new case based on a case_dict input.
+    """
+
     case = ClassFactory(sfdc,'Case')
 
     save_results = case.create(case_dict)
